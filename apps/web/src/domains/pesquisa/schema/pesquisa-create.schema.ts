@@ -1,6 +1,8 @@
-import { startOfDay } from "date-fns";
 import { z } from "zod";
 import { PERGUNTA_TIPOS, TIPOS_COM_OPCOES } from "../types/others";
+
+const utcDay = (date: Date): number =>
+  Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
 
 export const pesquisaCreateSchema = z
   .object({
@@ -72,16 +74,13 @@ export const pesquisaCreateSchema = z
       )
       .min(1, "Adicione pelo menos uma pergunta"),
   })
-  .refine(
-    ({ dataLancamento }) => startOfDay(dataLancamento) >= startOfDay(new Date()),
-    {
-      message: "A data não pode ser anterior a hoje.",
-      path: ["dataLancamento"],
-    },
-  )
+  .refine(({ dataLancamento }) => utcDay(dataLancamento) >= utcDay(new Date()), {
+    message: "A data não pode ser anterior a hoje.",
+    path: ["dataLancamento"],
+  })
   .refine(
     ({ dataEncerramento, dataLancamento }) =>
-      !dataEncerramento || dataEncerramento >= dataLancamento,
+      !dataEncerramento || utcDay(dataEncerramento) >= utcDay(dataLancamento),
     {
       message: "A data não pode ser anterior ao lançamento.",
       path: ["dataEncerramento"],

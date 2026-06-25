@@ -10,6 +10,9 @@ type PaginationTableProps = {
 export function PaginationTable({ page, pages }: PaginationTableProps) {
   const [, setSearchParams] = useSearchParams();
 
+  const totalPages = Math.max(pages, 1);
+  const current = Math.min(Math.max(page, 1), totalPages);
+
   function goToPage(nextPage: number) {
     setSearchParams((params) => {
       params.set("page", String(nextPage));
@@ -20,14 +23,14 @@ export function PaginationTable({ page, pages }: PaginationTableProps) {
   return (
     <div className={cn("flex items-center gap-3")}>
       <span className="text-sm text-zinc-500">
-        Página {page} de {pages}
+        Página {current} de {totalPages}
       </span>
       <Button
         data-test-id="pagination-previous-button"
         variant="outline"
         size="sm"
-        disabled={page <= 1}
-        onClick={() => goToPage(page - 1)}
+        disabled={current <= 1}
+        onClick={() => goToPage(current - 1)}
       >
         Anterior
       </Button>
@@ -35,8 +38,8 @@ export function PaginationTable({ page, pages }: PaginationTableProps) {
         data-test-id="pagination-next-button"
         variant="outline"
         size="sm"
-        disabled={page >= pages}
-        onClick={() => goToPage(page + 1)}
+        disabled={current >= totalPages}
+        onClick={() => goToPage(current + 1)}
       >
         Próxima
       </Button>

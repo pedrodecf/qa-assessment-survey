@@ -1,8 +1,5 @@
-import {
-  BadRequestException,
-  Injectable,
-  NotFoundException,
-} from "@nestjs/common";
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { validatePesquisaDisponivel } from "../helpers/validate-pesquisa-disponivel";
 import { FindPesquisaByPublicIdRepository } from "../repositories/find-pesquisa-by-public-id.repository";
 
 @Injectable()
@@ -16,9 +13,7 @@ export class ShowPesquisaPublicaService {
       throw new NotFoundException("Pesquisa não encontrada.");
     }
 
-    if (pesquisa.estaAtiva === false) {
-      throw new BadRequestException("Essa Pesquisa não está ativa.");
-    }
+    validatePesquisaDisponivel(pesquisa);
 
     return pesquisa;
   }

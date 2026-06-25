@@ -1,35 +1,35 @@
 import { Module } from "@nestjs/common";
 import { CreatePesquisaController } from "./controllers/create-pesquisa.controller";
 import { ListPesquisasController } from "./controllers/list-pesquisas.controller";
-import { ShowPesquisaController } from "./controllers/show-pesquisa.controller";
-import { UpdatePesquisaController } from "./controllers/update-pesquisa.controller";
 import { CreatePesquisaRepository } from "./repositories/create-pesquisa.repository";
-import { FindPesquisaByIdRepository } from "./repositories/find-pesquisa-by-id.repository";
 import { FindPesquisaByNomeRepository } from "./repositories/find-pesquisa-by-nome.repository";
 import { ListPesquisasRepository } from "./repositories/list-pesquisas.repository";
-import { UpdatePesquisaRepository } from "./repositories/update-pesquisa.repository";
 import { CreatePesquisaService } from "./services/create-pesquisa.service";
 import { ListPesquisasService } from "./services/list-pesquisas.service";
-import { ShowPesquisaService } from "./services/show-pesquisa.service";
-import { UpdatePesquisaService } from "./services/update-pesquisa.service";
+import { ShowPesquisaPublicaController } from "./controllers/show-pesquisa-publica.controller";
+import { SubmitPesquisaPublicaController } from "./controllers/submit-pesquisa-publica.controller";
+import { ShowPesquisaPublicaService } from "./services/show-pesquisa-publica.service";
+import { SubmitPesquisaPublicaService } from "./services/submit-pesquisa-publica.service";
+import { FindPesquisaByPublicIdRepository } from "./repositories/find-pesquisa-by-public-id.repository";
+import { SubmitPesquisaPublicaRepository } from "./repositories/submit-pesquisa-publica.repository";
 
 @Module({
   controllers: [
     CreatePesquisaController,
-    ShowPesquisaController,
-    UpdatePesquisaController,
     ListPesquisasController,
+    ShowPesquisaPublicaController,
+    SubmitPesquisaPublicaController
   ],
   providers: [
     CreatePesquisaService,
-    UpdatePesquisaService,
     ListPesquisasService,
-    ShowPesquisaService,
+    ShowPesquisaPublicaService,
+    SubmitPesquisaPublicaService,
     CreatePesquisaRepository,
-    UpdatePesquisaRepository,
     ListPesquisasRepository,
     FindPesquisaByNomeRepository,
-    FindPesquisaByIdRepository,
+    FindPesquisaByPublicIdRepository,
+    SubmitPesquisaPublicaRepository,
   ],
 })
 export class PesquisaModule {}

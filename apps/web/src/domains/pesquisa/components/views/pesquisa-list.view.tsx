@@ -1,8 +1,7 @@
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import Select from "@/components/ui/select";
-import Table from "@/components/ui/table";
-import { ColumnDef } from "@tanstack/react-table";
+import Table, { Column } from "@/components/ui/table";
 import { UseFormReturn } from "react-hook-form";
 import { NavigateFunction, useSearchParams } from "react-router-dom";
 import { PesquisaList } from "../../infra/entities/pesquisa-list.entity";
@@ -35,27 +34,27 @@ export function PesquisaListView({
 }: Readonly<TPesquisaListView>) {
   const [, setSearchParams] = useSearchParams();
 
-  const columns: ColumnDef<Pesquisa>[] = [
+  const columns: Column<Pesquisa>[] = [
     {
       id: "nome",
       header: "Nome",
-      cell: ({ row }) => (
+      cell: (pesquisa, index) => (
         <span
-          data-test-id={`pesquisa-nome-${row.id}`}
+          data-test-id={`pesquisa-nome-${index}`}
           className="font-medium text-zinc-800"
         >
-          {row.original.props.nome}
+          {pesquisa.props.nome}
         </span>
       ),
     },
     {
       id: "status",
       header: "Status",
-      cell: ({ row }) => {
-        const status = row.original.getStatus();
+      cell: (pesquisa, index) => {
+        const status = pesquisa.getStatus();
         return (
           <Badge
-            data-test-id={`pesquisa-status-${row.id}`}
+            data-test-id={`pesquisa-status-${index}`}
             variant={status.color === "green" ? "success" : "secondary"}
           >
             {status.label}
@@ -66,34 +65,27 @@ export function PesquisaListView({
     {
       id: "periodo",
       header: "Período",
-      cell: ({ row }) => (
+      cell: (pesquisa, index) => (
         <span
-          data-test-id={`pesquisa-periodo-${row.id}`}
+          data-test-id={`pesquisa-periodo-${index}`}
           className="text-zinc-600"
         >
-          {row.original.getPeriodo()}
+          {pesquisa.getPeriodo()}
         </span>
       ),
     },
     {
       id: "actions",
       header: "",
-      cell: ({ row }) => (
+      cell: (pesquisa, index) => (
         <div className="flex items-center justify-end gap-4">
           <Button
-            data-test-id={`pesquisa-edit-button-${row.id}`}
+            data-test-id={`pesquisa-public-button-${index}`}
             variant="outline"
             size="sm"
-            onClick={() => navigate(`/pesquisas/editar/${row.original.id}`)}
-          >
-            Editar
-          </Button>
-
-          <Button
-            data-test-id={`pesquisa-public-button-${row.id}`}
-            variant="outline"
-            size="sm"
-            onClick={() => navigate(`/pesquisas/resposta/${row.original?.props?.idPublico}`)}
+            onClick={() =>
+              navigate(`/pesquisas/resposta/${pesquisa.props.idPublico}`)
+            }
           >
             Responder
           </Button>

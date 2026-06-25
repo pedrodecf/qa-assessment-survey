@@ -25,13 +25,22 @@ export function PesquisaListService({ navigate }: TPesquisaListService) {
   const [searchParams] = useSearchParams();
 
   const queries = useMemo<PesquisaFilters>(() => {
-    return {
-      page: Number(searchParams.get("page") || "1"),
-      ordination: (searchParams.get("ordination") || "desc") as Order,
-      orderBy: (searchParams.get("orderBy") || "nome") as OrderBy,
-      status: searchParams.get("status") as PesquisaStatus | null,
-      empresaId: env.empresaId,
-    };
+    const pageParam = Number(searchParams.get("page"));
+    const page = Number.isInteger(pageParam) && pageParam > 0 ? pageParam : 1;
+
+    const ordination: Order =
+      searchParams.get("ordination") === "asc" ? "asc" : "desc";
+
+    const orderBy: OrderBy =
+      searchParams.get("orderBy") === "dataLancamento"
+        ? "dataLancamento"
+        : "nome";
+
+    const statusParam = searchParams.get("status");
+    const status: PesquisaStatus | null =
+      statusParam === "ativo" || statusParam === "inativo" ? statusParam : null;
+
+    return { page, ordination, orderBy, status, empresaId: env.empresaId };
   }, [searchParams]);
 
   const formFilters = useForm<
@@ -40,7 +49,7 @@ export function PesquisaListService({ navigate }: TPesquisaListService) {
     PesquisaFiltersOutputSchema
   >({
     resolver: zodResolver(pesquisaFiltersSchema),
-    defaultValues: { status: queries.status },
+    values: { status: queries.status },
   });
 
   const {

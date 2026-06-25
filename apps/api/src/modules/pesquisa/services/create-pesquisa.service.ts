@@ -1,6 +1,5 @@
-import { Injectable } from "@nestjs/common";
+import { ConflictException, Injectable } from "@nestjs/common";
 import { getStatusFromPeriod } from "src/modules/pesquisa/helpers/get-status-from-period";
-import { validateNameAvailability } from "src/modules/pesquisa/helpers/validate-name-availability";
 import { validateSurveyDates } from "src/modules/pesquisa/helpers/validate-survey-dates";
 import { CreatePesquisaDto } from "../dtos/create-pesquisa.dto";
 import { CreatePesquisaRepository } from "../repositories/create-pesquisa.repository";
@@ -21,12 +20,16 @@ export class CreatePesquisaService {
 
     validateSurveyDates(dataLancamento, dataEncerramento);
 
-    const existente = await this.findByNomeRepository.execute(
+    const surveyWithSameName = await this.findByNomeRepository.execute(
       data.empresaId,
       data.nome,
     );
 
-    validateNameAvailability(existente, null);
+    if (surveyWithSameName) {
+      throw new ConflictException(
+        "Já existe uma pesquisa com este nome para esta empresa.",
+      );
+    }
 
     const isActive: boolean = getStatusFromPeriod(
       dataLancamento,

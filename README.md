@@ -10,7 +10,7 @@ Um CRUD de **pesquisa de clima**: um admin cria pesquisas com perguntas de vári
 - **Web** (React + Vite) em `apps/web`, organizada em camadas **view / service / container**
 - **Banco** MySQL 8
 
-As operações principais são: **criar**, **editar** e **listar** pesquisas, e **responder** uma pesquisa pelo link público.
+As operações principais são: **criar** e **listar** pesquisas, e **responder** uma pesquisa pelo link público.
 
 Tudo sobe junto com `docker compose up`. O banco já vem **seedado** com dados em estados variados, prontos para você apontar seus testes.
 
@@ -47,7 +47,7 @@ Junto do código, escreva um **README curto** (pode ser um `TESTING.md`) com o *
 docker compose up
 ```
 
-- **API:** [http://localhost:3000](http://localhost:3000) — health em `GET /health`
+- **API:** [http://localhost:3000](http://localhost:3000)
 - **Web:** [http://localhost:5173](http://localhost:5173)
 - **MySQL:** `localhost:3306` (db `survey_db`, usuário `root`, senha `root`)
 

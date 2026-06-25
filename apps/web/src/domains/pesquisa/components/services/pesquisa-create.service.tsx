@@ -10,6 +10,7 @@ import {
   PesquisaCreateInputSchema,
   PesquisaCreateOutputSchema,
 } from "../../schema/pesquisa-create.schema";
+import { TIPOS_COM_OPCOES } from "../../types/others";
 import { PesquisaCreateView } from "../views/pesquisa-create.view";
 
 type TPesquisaCreateService = {
@@ -56,14 +57,17 @@ export function PesquisaCreateService({ navigate }: TPesquisaCreateService) {
         dataEncerramento: data.dataEncerramento
           ? data.dataEncerramento.toISOString()
           : null,
-        perguntas: data.perguntas.map((pergunta) => ({
-          nome: pergunta.nome,
-          tipo: pergunta.tipo,
-          respostaObrigatoria: pergunta.respostaObrigatoria,
-          justificarResposta: pergunta.justificarResposta,
-          permitirOutro: pergunta.permitirOutro,
-          opcoes: pergunta.opcoes.map((opcao) => opcao.texto),
-        })),
+        perguntas: data.perguntas.map((pergunta) => {
+          const exigeOpcoes = TIPOS_COM_OPCOES.includes(pergunta.tipo);
+          return {
+            nome: pergunta.nome,
+            tipo: pergunta.tipo,
+            respostaObrigatoria: pergunta.respostaObrigatoria,
+            justificarResposta: pergunta.justificarResposta,
+            permitirOutro: exigeOpcoes ? pergunta.permitirOutro : false,
+            opcoes: exigeOpcoes ? pergunta.opcoes.map((opcao) => opcao.texto) : [],
+          };
+        }),
       }),
 
     onSuccess: () => {

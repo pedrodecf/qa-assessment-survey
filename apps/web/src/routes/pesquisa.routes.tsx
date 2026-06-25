@@ -12,4 +12,8 @@ export const pesquisaAppRoutes: RouteObject[] = [
     path: `/${routeName}/criar`,
     element: <pesquisaRoutes.PESQUISA_CREATE />,
   },
+  {
+    path: `/${routeName}/resposta/:idPublico`,
+    element: <pesquisaRoutes.PESQUISA_SUBMIT />,
+  },
 ];

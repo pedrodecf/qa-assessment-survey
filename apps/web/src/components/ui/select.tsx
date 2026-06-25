@@ -1,12 +1,5 @@
 import { Control, Controller, FieldValues, Path } from "react-hook-form";
 import { cn } from "@/lib/utils";
-import {
-  Select as Root,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "./headless/select";
 
 type TOption = {
   value: string;
@@ -45,60 +38,32 @@ export default function Select<T extends FieldValues>({
           {label && (
             <label className="text-sm font-medium text-zinc-700">{label}</label>
           )}
-          <div className="relative flex items-center w-full">
-          <Root
+          <select
+            data-test-id={dataTestId}
             value={value ?? ""}
-            onValueChange={(next) => {
-              onChange(next);
+            onChange={(event) => {
+              const next = event.target.value;
+              onChange(next === "" ? null : next);
               onChangeCapture?.(next);
             }}
+            className={cn(
+              "h-10 w-full rounded-md border bg-white px-3 py-2 text-sm text-zinc-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:ring-offset-1",
+              helperText ? "border-red-400" : "border-zinc-300",
+            )}
           >
-            <SelectTrigger
-              data-test-id={dataTestId}
-              className={cn(clearable && value && "pr-10")}
-            >
-              <SelectValue placeholder={placeholder ?? "Selecione..."} />
-            </SelectTrigger>
-            <SelectContent>
-              {options.map((option, index) => (
-                <SelectItem
-                  key={option.value}
-                  value={option.value}
-                  data-test-id={`${dataTestId}-option-${index}`}
-                >
-                  {option.label}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Root>
-
-          {clearable && value && (
-            <button
-              type="button"
-              data-test-id={`${dataTestId}-clear`}
-              aria-label="Limpar filtro"
-              onClick={(e) => {
-                e.stopPropagation();
-                onChange(null);
-                onChangeCapture?.("");
-              }}
-              className="absolute right-3 top-1/2 -translate-y-1/2 flex h-5 w-5 items-center justify-center rounded-full text-zinc-400 hover:bg-zinc-100 hover:text-zinc-600 transition-colors"
-            >
-              <svg
-                width="11"
-                height="11"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+            {(clearable || !value) && (
+              <option value="">{placeholder ?? "Selecione..."}</option>
+            )}
+            {options.map((option, index) => (
+              <option
+                key={option.value}
+                value={option.value}
+                data-test-id={`${dataTestId}-option-${index}`}
               >
-                <path d="M18 6 6 18M6 6l12 12" />
-              </svg>
-            </button>
-          )}
-          </div>
+                {option.label}
+              </option>
+            ))}
+          </select>
           {helperText && (
             <span
               data-test-id={`${dataTestId}-helper-text`}

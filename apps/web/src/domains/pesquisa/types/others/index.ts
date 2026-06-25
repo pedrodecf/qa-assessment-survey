@@ -37,3 +37,41 @@ export const TIPOS_COM_OPCOES: PerguntaTipo[] = [
 export function tipoExigeOpcoes(tipo?: PerguntaTipo): boolean {
   return !!tipo && TIPOS_COM_OPCOES.includes(tipo);
 }
+
+export type OpcaoPadronizada =
+  | "muito_satisfeito"
+  | "satisfeito"
+  | "indiferente"
+  | "insatisfeito"
+  | "muito_insatisfeito"
+  | "excelente"
+  | "bom"
+  | "regular"
+  | "ruim"
+  | "pessimo";
+
+export const NIVEL_SATISFACAO_OPTIONS: { value: OpcaoPadronizada; label: string }[] =
+  [
+    { value: "muito_satisfeito", label: "Muito satisfeito" },
+    { value: "satisfeito", label: "Satisfeito" },
+    { value: "indiferente", label: "Indiferente" },
+    { value: "insatisfeito", label: "Insatisfeito" },
+    { value: "muito_insatisfeito", label: "Muito insatisfeito" },
+  ];
+
+export const QUALIDADE_PERCEBIDA_OPTIONS: {
+  value: OpcaoPadronizada;
+  label: string;
+}[] = [
+  { value: "excelente", label: "Excelente" },
+  { value: "bom", label: "Bom" },
+  { value: "regular", label: "Regular" },
+  { value: "ruim", label: "Ruim" },
+  { value: "pessimo", label: "Péssimo" },
+];
+
+export function pontuacaoMaxima(tipo: PerguntaTipo): number {
+  return tipo === "pontuacao_0_a_10" ? 10 : 5;
+}
+
+export const OUTRO_VALUE = "__outro__";

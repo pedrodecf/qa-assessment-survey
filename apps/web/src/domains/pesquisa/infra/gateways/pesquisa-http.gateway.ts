@@ -2,6 +2,8 @@ import { HttpClient } from "@/lib/http/http-client";
 import type {
   CreatePesquisaDTO,
   PesquisaFilters,
+  PublicPesquisaDTO,
+  SubmitPesquisaDTO,
 } from "../../types/dtos/pesquisa.dto";
 import { PesquisaList } from "../entities/pesquisa-list.entity";
 import { PesquisaGateway } from "./pesquisa.gateway";
@@ -24,5 +26,16 @@ export class PesquisaHttpGateway implements PesquisaGateway {
 
   async createPesquisa(data: CreatePesquisaDTO): Promise<void> {
     await this.httpClient.post(`/${this.route}`, data);
+  }
+
+  async getPublicPesquisa(idPublico: string): Promise<PublicPesquisaDTO> {
+    return await this.httpClient.get(`/public/${idPublico}`);
+  }
+
+  async submitPesquisa(
+    idPublico: string,
+    data: SubmitPesquisaDTO,
+  ): Promise<void> {
+    await this.httpClient.post(`/public/${idPublico}/respostas`, data);
   }
 }

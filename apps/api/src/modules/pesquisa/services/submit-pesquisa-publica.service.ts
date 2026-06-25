@@ -3,13 +3,14 @@ import {
   Injectable,
   NotFoundException,
 } from "@nestjs/common";
-import type { PerguntaInput } from "src/modules/pesquisa-publica/helpers/types";
-import { validateAllowedFields } from "src/modules/pesquisa-publica/helpers/validate-allowed-fields";
-import { validateAnswersDuplicates } from "src/modules/pesquisa-publica/helpers/validate-answers-duplicates";
-import { validateConditionalFields } from "src/modules/pesquisa-publica/helpers/validate-conditional-fields";
-import { validateFieldValues } from "src/modules/pesquisa-publica/helpers/validate-field-values";
-import { validateRequiredAnswered } from "src/modules/pesquisa-publica/helpers/validate-required-answered";
-import { validateRequiredFields } from "src/modules/pesquisa-publica/helpers/validate-required-fields";
+import type { PerguntaInput } from "src/modules/pesquisa/helpers/types";
+import { validateAllowedFields } from "src/modules/pesquisa/helpers/validate-allowed-fields";
+import { validateAnswersDuplicates } from "src/modules/pesquisa/helpers/validate-answers-duplicates";
+import { validateConditionalFields } from "src/modules/pesquisa/helpers/validate-conditional-fields";
+import { validateFieldValues } from "src/modules/pesquisa/helpers/validate-field-values";
+import { validateRequiredAnswered } from "src/modules/pesquisa/helpers/validate-required-answered";
+import { validateRequiredFields } from "src/modules/pesquisa/helpers/validate-required-fields";
+import { validatePesquisaDisponivel } from "src/modules/pesquisa/helpers/validate-pesquisa-disponivel";
 import type { SubmitPesquisaPublicaDto } from "../dtos/submit-pesquisa-publica.dto";
 import { FindPesquisaByPublicIdRepository } from "../repositories/find-pesquisa-by-public-id.repository";
 import { SubmitPesquisaPublicaRepository } from "../repositories/submit-pesquisa-publica.repository";
@@ -41,9 +42,7 @@ export class SubmitPesquisaPublicaService {
       throw new NotFoundException("Pesquisa não encontrada.");
     }
 
-    if (pesquisa.estaAtiva === false) {
-      throw new BadRequestException("Essa Pesquisa não está ativa.");
-    }
+    validatePesquisaDisponivel(pesquisa);
 
     const perguntasMap = new Map<number, PerguntaInput>();
 

@@ -8,6 +8,7 @@ export function validateAnswersDuplicates(
 ): void {
   const seenPerguntaIds = new Set<number>();
   const optionsByPerguntaId = new Map<number, Set<number>>();
+  const outroByPerguntaId = new Set<number>();
 
   for (const resposta of respostas) {
     const pergunta = perguntasMap.get(resposta.perguntaId);
@@ -29,6 +30,13 @@ export function validateAnswersDuplicates(
         }
         opcoes.add(resposta.opcaoId!);
         optionsByPerguntaId.set(pergunta.id, opcoes);
+      } else if (isFilled(resposta.outroTexto)) {
+        if (outroByPerguntaId.has(pergunta.id)) {
+          throw new BadRequestException(
+            `A opção "outro" foi enviada mais de uma vez para a pergunta ${pergunta.id}.`,
+          );
+        }
+        outroByPerguntaId.add(pergunta.id);
       }
       continue;
     }

@@ -7,8 +7,8 @@ import {
   UsePipes,
 } from "@nestjs/common";
 import { ZodValidationPipe } from "nestjs-zod";
-import { SubmitPesquisaPublicaDto } from "../dtos/submit-pesquisa-publica.dto";
 import { SubmitPesquisaPublicaService } from "../services/submit-pesquisa-publica.service";
+import { SubmitPesquisaPublicaDto } from "../dtos/submit-pesquisa-publica.dto";
 
 @Controller("public")
 export class SubmitPesquisaPublicaController {
